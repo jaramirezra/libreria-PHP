@@ -1,0 +1,15 @@
+{
+    "name": "andres/libreria-php",
+    "autoload": {
+        "psr-4": {
+            "Andres\\LibreriaPhp\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jeison Ramirez",
+            "email": "ramirezjeisonandres@gmail.com"
+        }
+    ],
+    "require": {}
+}

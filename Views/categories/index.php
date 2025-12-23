@@ -1,0 +1,45 @@
+<?php include __DIR__ . '/../header.php'; ?>
+
+<body>
+    <div class="container mt-4">
+        <div class="list-container">
+            <h1>Categoría</h1>
+            <div class="d-grid gap-2 d-md-block mt-4 mb-4">
+                <a href="categories/create" class="btn btn-outline-success">Crear</a>
+                <a href="../home" class="btn btn-outline-secondary">Cancelar</a>
+            </div>
+
+            <div class="mt-3 mb-3">
+                <table id="categories" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th width="160">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($categories as $category): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($category['id']); ?></td>
+                                <td><?= htmlspecialchars($category['name']); ?></td>
+                                <td>
+                                    <a href="categories/edit?id=<?= $category['id']; ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                                    <form method="POST" action="categories/delete?id=<?= $category['id']; ?>" style="display:inline;">
+                                        <button type="submit" class="btn btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar esta categoría?');">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <?php include __DIR__ . '/../footer.php'; ?>
+    <script src="<?php __DIR__; ?>../assets/js/categories.js"></script>
+</body>
+
+</html>

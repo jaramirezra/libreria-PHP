@@ -1,0 +1,30 @@
+<?php 
+include __DIR__ . '/../header.php';
+$editing = isset($category) ? true : false;
+?>
+
+<body>
+    <div class="container mt-4">
+        <div class="list-container">
+            <h1><?= $editing ? 'Editar Categoría' : 'Crear Categoría'; ?></h1>
+            <form method="POST" action="categories">
+                <div class="row mt-3 mb-3">
+                    <div class="col-sm-12">
+                        <label for="name" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<?= $editing ? $category['name'] : ''; ?>">
+                    </div>
+                </div>
+
+                <div class="col-3 mx-auto">
+                    <button class="btn btn-outline-success" type="submit">Guardar</button>
+                    <a href="../categories" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+    <?php include __DIR__ . '/../footer.php'; ?>
+</body>
+
+</html>
