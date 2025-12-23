@@ -1,4 +1,4 @@
-<?php 
+<?php
 include __DIR__ . '/../header.php';
 $editing = isset($category) ? true : false;
 ?>
@@ -13,6 +13,9 @@ $editing = isset($category) ? true : false;
                         <label for="name" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="name" name="name" value="<?= $editing ? $category['name'] : ''; ?>">
                     </div>
+                    <?php if ($editing): ?>
+                        <input type="hidden" name="id" value="<?= $category['id']; ?>">
+                    <?php endif; ?>
                 </div>
 
                 <div class="col-3 mx-auto">

@@ -3,27 +3,32 @@
 namespace Andres\LibreriaPhp\Controllers;
 
 use Andres\LibreriaPhp\Models\Category;
+use Exception;
 
 class CategoryController
 {
     private $categoryModel;
 
+    // Constructor
     public function __construct()
     {
         $this->categoryModel = new Category();
     }
 
+    // Listar todas las categorías
     public function index()
     {
         $categories = $this->categoryModel->all();
         require_once __DIR__ . '/../../Views/categories/index.php';
     }
 
+    // Mostrar formulario para crear nueva categoría
     public function create()
     {
         require_once __DIR__ . '/../../Views/categories/add.php';
     }
 
+    // Mostrar formulario para editar categoría existente
     public function edit($id)
     {
         $category = $this->categoryModel->find($id);
@@ -36,26 +41,37 @@ class CategoryController
         require_once __DIR__ . '/../../Views/categories/add.php';
     }
 
+    // Guardar nueva categoría o actualizar existente
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
+            $name = trim($_POST['name'] ?? '');
             $status = $_POST['status'] ?? 1;
             $id = $_POST['id'] ?? null;
 
-            if ($id) {
-                // Actualizar categoría existente
-                $this->categoryModel->update($id, ['name' => $name]);
-
-                header('Location: /');
+            // Validación
+            if (empty($name)) {
+                $_SESSION['error'] = 'El nombre de la categoría es requerido';
+                $redirect = $id ? 'categories/' . $id . '/edit' : 'categories/create';
+                header('Location: ' . BASE_URL . $redirect);
                 exit;
             }
 
-            if (!empty($name)) {
-                $this->categoryModel->create(['name' => $name, 'status' => $status]);
+            try {
+                if ($id) {
+                    $this->categoryModel->update($id, ['name' => $name, 'status' => $status]);
+                    $_SESSION['success'] = 'Categoría actualizada correctamente';
+                } else {
+                    $this->categoryModel->create(['name' => $name, 'status' => $status]);
+                    $_SESSION['success'] = 'Categoría creada correctamente';
+                }
 
-                // Redireccionar o mostrar mensaje de éxito
-                header('Location: categories');
+                header('Location: ' . BASE_URL . 'categories');
+                exit;
+            } catch (Exception $e) {
+                $_SESSION['error'] = 'Error al guardar la categoría: ' . $e->getMessage();
+                $redirect = $id ? 'categories/' . $id . '/edit' : 'categories/create';
+                header('Location: ' . BASE_URL . $redirect);
                 exit;
             }
         }
@@ -81,19 +97,7 @@ class CategoryController
     public function delete($id)
     {
         $this->categoryModel->delete($id);
-        header('Location: /git/libreria-PHP/public/');
+        header('Location: /git/libreria-PHP/public/categories');
         exit;
-    }
-
-    // Mostrar una sola categoría
-    public function show($id)
-    {
-        $category = $this->categoryModel->find($id);
-
-        if (!$category) {
-            die("Categoría no encontrada");
-        }
-
-        require_once __DIR__ . '/../../Views/categories/show.php';
     }
 }
