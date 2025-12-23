@@ -10,7 +10,7 @@ class Category
     public static function all()
     {
         $pdo = \Database::getInstance();
-        $sql = "SELECT * FROM categories";
+        $sql = "SELECT * FROM categories WHERE status = 1";
         $stmt = $pdo->query($sql);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -55,7 +55,7 @@ class Category
     public static function delete($id)
     {
         $pdo = \Database::getInstance();
-        $sql = "DELETE FROM categories WHERE id = :id";
+        $sql = "UPDATE categories SET status = 0 WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
     }

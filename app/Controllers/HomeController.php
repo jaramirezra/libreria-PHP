@@ -57,6 +57,7 @@ class HomeController
         }
     }
 
+    // Eliminar un registro
     public function delete($id)
     {
         $this->siteModel->delete($id);

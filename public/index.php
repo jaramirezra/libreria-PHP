@@ -71,7 +71,17 @@ class Router
             exit;
         }
 
-        // GET /categories/{id}/edit
+        // GET /categories/edit?id={id}
+        if ($this->method === 'GET' && count($parts) === 1 && $parts[0] === 'edit') {
+            if (isset($this->queryParams['id']) && is_numeric($this->queryParams['id'])) {
+                $categoryController->edit((int)$this->queryParams['id']);
+                exit;
+            } else {
+                $this->notFound();
+            }
+        }
+
+        // GET /categories/{id}/edit (alternativa)
         if ($this->method === 'GET' && count($parts) === 2 && is_numeric($parts[0]) && $parts[1] === 'edit') {
             $categoryController->edit((int)$parts[0]);
             exit;
@@ -89,13 +99,22 @@ class Router
             exit;
         }
 
-        // POST /categories/{id}/delete
+        // POST /categories/{id}/delete (ruta con ID)
         if ($this->method === 'POST' && count($parts) === 2 && is_numeric($parts[0]) && $parts[1] === 'delete') {
             $categoryController->delete((int)$parts[0]);
             exit;
         }
 
-        // Si no coincide ninguna ruta, mostrar 404
+        // POST /categories/delete?id={id} (nuevo: con query parameter)
+        if ($this->method === 'POST' && count($parts) === 1 && $parts[0] === 'delete') {
+            if (isset($this->queryParams['id']) && is_numeric($this->queryParams['id'])) {
+                $categoryController->delete((int)$this->queryParams['id']);
+                exit;
+            } else {
+                $this->notFound();
+            }
+        }
+
         $this->notFound();
     }
 
@@ -140,7 +159,7 @@ class Router
                     exit;
                 }
             }
-            
+
             // Para store desde /create
             if ($this->request === '/create') {
                 $controller->store($_POST);
