@@ -7,7 +7,7 @@ $editing = isset($category) ? true : false;
     <div class="container mt-4">
         <div class="list-container">
             <h1><?= $editing ? 'Editar Categoría' : 'Crear Categoría'; ?></h1>
-            <form method="POST" action="categories">
+            <form method="POST" action="<?= BASE_URL; ?><?= $editing ? 'categories/' . $category['id'] : 'categories'; ?>" id="categoryForm">
                 <div class="row mt-3 mb-3">
                     <div class="col-sm-12">
                         <label for="name" class="form-label">Nombre:</label>
@@ -20,7 +20,7 @@ $editing = isset($category) ? true : false;
 
                 <div class="col-3 mx-auto">
                     <button class="btn btn-outline-success" type="submit">Guardar</button>
-                    <a href="../categories" class="btn btn-outline-secondary">Cancelar</a>
+                    <a href="<?= BASE_URL; ?>categories" class="btn btn-outline-secondary">Cancelar</a>
                 </div>
             </form>
         </div>
@@ -28,6 +28,8 @@ $editing = isset($category) ? true : false;
 
     </div>
     <?php include __DIR__ . '/../footer.php'; ?>
+    <script>window.BASE_URL = "<?= BASE_URL; ?>";</script>
+    <script src="<?= BASE_URL; ?>../assets/js/categories.js"></script>
 </body>
 
 </html>

@@ -48,12 +48,15 @@ class HomeController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $data['id'] ?? null;
+            header('Content-Type: application/json');
             if ($id) {
                 $this->siteModel->update($id, $data);
+                echo json_encode(['success' => true, 'message' => 'Sitio actualizado correctamente.']);
             } else {
                 $this->siteModel->create($data);
+                echo json_encode(['success' => true, 'message' => 'Sitio creado correctamente.']);
             }
-            header('Location: home');
+            exit;
         }
     }
 
