@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<?php 
+session_start(); 
+require_once __DIR__ . '/../config/config.php';
+?>
 <html lang="es">
 <head>
     <meta charset="UTF-8">

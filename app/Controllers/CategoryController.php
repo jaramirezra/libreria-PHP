@@ -44,38 +44,33 @@ class CategoryController
     // Guardar nueva categoría o actualizar existente
     public function store()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = trim($_POST['name'] ?? '');
-            $status = $_POST['status'] ?? 1;
-            $id = $_POST['id'] ?? null;
-
-            // Validación
-            if (empty($name)) {
-                $_SESSION['error'] = 'El nombre de la categoría es requerido';
-                $redirect = $id ? 'categories/' . $id . '/edit' : 'categories/create';
-                header('Location: ' . BASE_URL . $redirect);
-                exit;
-            }
-
-            try {
-                if ($id) {
-                    $this->categoryModel->update($id, ['name' => $name, 'status' => $status]);
-                    $_SESSION['success'] = 'Categoría actualizada correctamente';
-                } else {
-                    $this->categoryModel->create(['name' => $name, 'status' => $status]);
-                    $_SESSION['success'] = 'Categoría creada correctamente';
-                }
-
-                header('Location: ' . BASE_URL . 'categories');
-                exit;
-            } catch (Exception $e) {
-                $_SESSION['error'] = 'Error al guardar la categoría: ' . $e->getMessage();
-                $redirect = $id ? 'categories/' . $id . '/edit' : 'categories/create';
-                header('Location: ' . BASE_URL . $redirect);
-                exit;
-            }
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return;
         }
+
+        header('Content-Type: application/json');
+
+        $name   = trim($_POST['name'] ?? '');
+        $status = $_POST['status'] ?? 1;
+        $id     = $_POST['id'] ?? null;
+
+        if ($name === '') {
+            echo json_encode(['success' => false,'message' => 'El nombre de la categoría es requerido.']);
+            exit;
+        }
+
+        if ($id) {
+            $this->categoryModel->update($id, compact('name', 'status'));
+            $message = 'Categoría actualizada correctamente.';
+        } else {
+            $this->categoryModel->create(compact('name', 'status'));
+            $message = 'Categoría creada correctamente.';
+        }
+
+        echo json_encode(['success' => true,'message' => $message]);
+        exit;
     }
+
 
     // Actualizar categoría existente
     public function update($id)
@@ -96,8 +91,20 @@ class CategoryController
     // Eliminar categoría
     public function delete($id)
     {
-        $this->categoryModel->delete($id);
-        header('Location: /git/libreria-PHP/public/categories');
+        // Verificar si la categoría está siendo usada por sitios activos
+        $pdo = \Database::getInstance();
+        $sql = "SELECT COUNT(*) FROM sites WHERE category_id = :id AND status = 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        $count = $stmt->fetchColumn();
+
+        header('Content-Type: application/json');
+        if ($count > 0) {
+            echo json_encode(['error' => true, 'message' => 'No se puede eliminar la categoría porque está siendo utilizada por uno o más sitios activos.']);
+        } else {
+            $this->categoryModel->delete($id);
+            echo json_encode(['success' => true, 'message' => 'Categoría eliminada correctamente.']);
+        }
         exit;
     }
 }

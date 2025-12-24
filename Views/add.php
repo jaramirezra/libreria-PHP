@@ -6,7 +6,7 @@ $editing = isset($site) ? true : false;
     <div class="container mt-4">
         <div class="list-container">
             <h1><?= $editing ? 'Editar Registro' : 'Crear Registro'; ?></h1>
-            <form method="POST" action="sites">
+            <form method="POST" action="<?php echo BASE_URL; ?>sites" id="siteForm">
                 <div class="row mt-4 mb-4">
                     <div class="col-sm-6">
                         <label for="name" class="form-label">Nombre:</label>
@@ -17,7 +17,7 @@ $editing = isset($site) ? true : false;
                         <input type="text" class="form-control" id="url" name="url" required value="<?= $editing ? htmlspecialchars($site['url']) : ''; ?>" required>
                     </div>
                     <div class="col-sm-6 mt-3">
-                        <label for="category_id" class="form-label">Categoria:</label>
+                        <label for="category_id" class="form-label">Categoría:</label>
                         <select class="form-select" name="category_id" id="category_id">
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?= $category['id']; ?>" <?= ($editing && $category['id'] == $site['category_id']) ? 'selected' : ''; ?>><?= htmlspecialchars($category['name']); ?></option>
@@ -39,5 +39,7 @@ $editing = isset($site) ? true : false;
 
     </div>
     <?php include 'footer.php'; ?>
+    <script>window.BASE_URL = "<?php echo BASE_URL; ?>";</script>
+    <script src="../assets/js/landing.js"></script>
 </body>
 </html>
