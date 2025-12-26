@@ -71,7 +71,6 @@ $(document).ready(function () {
           Swal.fire("Error", response.message, "error");
         }
       },
-
       error: function () {
         Swal.fire("Error", "Error del servidor", "error");
       },

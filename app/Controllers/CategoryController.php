@@ -76,15 +76,20 @@ class CategoryController
     public function update($id)
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['name'] ?? '';
+            header('Content-Type: application/json');
+
+            $name = trim($_POST['name'] ?? '');
             $status = $_POST['status'] ?? 1;
 
-            if (!empty($name)) {
-                $this->categoryModel->update($id, ['name' => $name, 'status' => $status]);
-
-                header('Location: /git/libreria-PHP/public/');
+            if ($name === '') {
+                echo json_encode(['success' => false, 'message' => 'El nombre de la categoría es requerido.']);
                 exit;
             }
+
+            $this->categoryModel->update($id, ['name' => $name, 'status' => $status]);
+
+            echo json_encode(['success' => true, 'message' => 'Categoría actualizada correctamente.']);
+            exit;
         }
     }
 

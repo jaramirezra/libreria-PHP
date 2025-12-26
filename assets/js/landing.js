@@ -1,3 +1,21 @@
+function confirmDelete(form) {
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "¿Estás seguro de que deseas eliminar este sitio?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      form.submit();
+      Swal.fire("Eliminado!", "El sitio ha sido eliminado.", "success");
+    }
+  });
+}
+
 $(document).ready(function () {
   $("#dataTable").DataTable({
     language: {
@@ -26,11 +44,7 @@ $(document).ready(function () {
         }
       },
       error: function () {
-        Swal.fire(
-          "Error!",
-          "Ocurrió un error al guardar el sitio.",
-          "error"
-        );
+        Swal.fire("Error!", "Ocurrió un error al guardar el sitio.", "error");
       },
     });
   });

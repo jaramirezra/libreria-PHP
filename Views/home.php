@@ -27,7 +27,7 @@
                             <td>
                                 <a href="<?php echo BASE_URL; ?>edit?id=<?= $site['id']; ?>" class="btn btn-sm btn-outline-primary">Editar</a>
                                 <form method="POST" action="<?php echo BASE_URL; ?>delete?id=<?= $site['id']; ?>" style="display:inline;">
-                                    <button type="submit" class="btn btn btn-sm btn-outline-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este sitio?');">Eliminar</button>
+                                    <button type="button" class="btn btn btn-sm btn-outline-danger" onclick="confirmDelete(this.form)">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -39,6 +39,9 @@
     </div>
     <?php include 'footer.php'; ?>
     <script>window.BASE_URL = "<?php echo BASE_URL; ?>";</script>
+    <script>
+        
+    </script>
     <script src="../assets/js/landing.js"></script>
 
 </body>
